@@ -1,0 +1,32 @@
+@using Test1.Models
+    <button class="btn btn-primary mb-3" onclick="openTeacherModal()">Add Teacher</button>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var teacher in Model)
+        {
+            <tr>
+                <td>@teacher.Name</td>
+                <td>@teacher.Gender</td>
+                <td>@teacher.Dob</td>
+                <td>@teacher.Email</td>
+                <td>@teacher.Phone</td>
+                <td>@teacher.Address</td>
+                <td>
+                    <button class="btn btn-warning" onclick="editTeacher(@teacher.TeacherId)">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteTeacher(@teacher.TeacherId)">Delete</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>

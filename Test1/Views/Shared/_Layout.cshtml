@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - YourAppName</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+</head>
+<body>
+@Html.Partial("Students/_EditStudentModal.cshtml")
+@Html.Partial("Students/_StudentModal.cshtml")
+<div class="container">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="students-tab" data-toggle="tab" href="#students" role="tab" aria-controls="students" aria-selected="true">Students</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="teachers-tab" data-toggle="tab" href="#teachers" role="tab" aria-controls="teachers" aria-selected="false">Teachers</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="students" role="tabpanel" aria-labelledby="students-tab">
+            @await Component.InvokeAsync("ViewStudents")
+        </div>
+        <div class="tab-pane fade" id="teachers" role="tabpanel" aria-labelledby="teachers-tab">
+            @await Component.InvokeAsync("ViewTeachers")
+        </div>
+    </div>
+    <div>
+        @RenderBody()
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- Add this script at the end of the <body> tag in _Layout.cshtml -->
+<script>
+    function openStudentModal() {
+        $('#studentModal').modal('show');
+    }
+
+    $(document).ready(function() {
+        $('#studentForm').on('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '/api/AddStudent',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#studentModal').modal('hide');
+                    location.reload(); // Reload the page to see the new student
+                },
+                error: function(error) {
+                    alert('Error adding student');
+                }
+            });
+        });
+    });
+    
+    function openEditStudentModal(student) {
+        $('#editStudentId').val(student.StudentId);
+        $('#editStudentName').val(student.Name);
+        $('#editStudentGender').val(student.Gender);
+        $('#editStudentDob').val(student.Dob);
+        $('#editStudentEmail').val(student.Email);
+        $('#editStudentPhone').val(student.Phone);
+        $('#editStudentAddress').val(student.Address);
+        $('#editStudentModal').modal('show');
+    }
+
+    $(document).ready(function() {
+        $('#editStudentForm').on('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '/api/EditStudent',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#editStudentModal').modal('hide');
+                    location.reload(); // Reload the page to see the updated student
+                },
+                error: function(error) {
+                    alert('Error editing student');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
