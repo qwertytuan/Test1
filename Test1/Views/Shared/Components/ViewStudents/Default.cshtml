@@ -1,3 +1,4 @@
+@using System.Text.Json
 @using Test1.Models
 <button class="btn btn-primary mb-3" onclick="openStudentModal()">Add Student</button>
     <table class="table">
@@ -23,8 +24,8 @@
                 <td>@student.Phone</td>
                 <td>@student.Address</td>
                 <td>
-                    <button class="btn btn-warning" onclick="openEditStudentModal(@student)">Edit</button>
-                    <button class="btn btn-danger" onclick="deleteStudent(@student)">Delete</button>
+                    <button class="btn btn-warning" onclick="openEditStudentModal(@JsonSerializer.Serialize(student))">Edit</button>
+                    <button class="btn btn-danger" onclick="openDeleteStudentModal(@student.StudentId)">Delete</button>
                 </td>
             </tr>
         }

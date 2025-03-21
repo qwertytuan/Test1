@@ -9,6 +9,7 @@
 <body>
 @Html.Partial("Students/_EditStudentModal.cshtml")
 @Html.Partial("Students/_StudentModal.cshtml")
+@Html.Partial("Students/_DeleteStudentModal")
 <div class="container">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
@@ -86,6 +87,26 @@
             });
         });
     });
+
+    function openDeleteStudentModal(studentId) {
+        $('#deleteStudentId').val(studentId);
+        $('#deleteStudentModal').modal('show');
+    }
+
+    function confirmDeleteStudent() {
+        var studentId = $('#deleteStudentId').val();
+        $.ajax({
+            url: '/api/DeleteStudent/' + studentId,
+            type: 'DELETE',
+            success: function(response) {
+                $('#deleteStudentModal').modal('hide');
+                location.reload(); // Reload the page to see the updated list of students
+            },
+            error: function(error) {
+                alert('Error deleting student');
+            }
+        });
+    }
 </script>
 </body>
 </html>
