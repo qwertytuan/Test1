@@ -10,6 +10,9 @@
 @Html.Partial("Students/_EditStudentModal.cshtml")
 @Html.Partial("Students/_StudentModal.cshtml")
 @Html.Partial("Students/_DeleteStudentModal")
+@Html.Partial("Teachers/_TeacherModal.cshtml")
+@Html.Partial("Teachers/_EditTeacherModal.cshtml")
+@Html.Partial("Teachers/_DeleteTeacherModal")
 <div class="container">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
@@ -104,6 +107,77 @@
             },
             error: function(error) {
                 alert('Error deleting student');
+            }
+        });
+    }
+
+    function openTeacherModal() {
+        $('#teacherModal').modal('show');
+    }
+
+    $(document).ready(function() {
+        $('#teacherForm').on('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '/api/AddTeacher',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#teacherModal').modal('hide');
+                    location.reload(); // Reload the page to see the new teacher
+                },
+                error: function(error) {
+                    alert('Error adding teacher');
+                }
+            });
+        });
+    });
+
+    function openEditTeacherModal(teacher) {
+        $('#editTeacherId').val(teacher.TeacherId);
+        $('#editTeacherName').val(teacher.Name);
+        $('#editTeacherGender').val(teacher.Gender);
+        $('#editTeacherDob').val(teacher.Dob);
+        $('#editTeacherEmail').val(teacher.Email);
+        $('#editTeacherPhone').val(teacher.Phone);
+        $('#editTeacherAddress').val(teacher.Address);
+        $('#editTeacherModal').modal('show');
+    }
+
+    $(document).ready(function() {
+        $('#editTeacherForm').on('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '/api/EditTeacher',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#editTeacherModal').modal('hide');
+                    location.reload(); // Reload the page to see the updated teacher
+                },
+                error: function(error) {
+                    alert('Error editing teacher');
+                }
+            });
+        });
+    });
+
+    function openDeleteTeacherModal(teacherId) {
+        $('#deleteTeacherId').val(teacherId);
+        $('#deleteTeacherModal').modal('show');
+    }
+
+    function confirmDeleteTeacher() {
+        var teacherId = $('#deleteTeacherId').val();
+        $.ajax({
+            url: '/api/DeleteTeacher/' + teacherId,
+            type: 'DELETE',
+            success: function(response) {
+                $('#deleteTeacherModal').modal('hide');
+                location.reload(); // Reload the page to see the updated list of teachers
+            },
+            error: function(error) {
+                alert('Error deleting teacher');
             }
         });
     }
